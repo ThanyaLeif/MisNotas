@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MisNotas</string>
+    <string name="title_activity_vista_detalle">VistaDetalle</string>
 </resources>
