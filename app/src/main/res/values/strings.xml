@@ -7,4 +7,5 @@
     <string name="nav_header_subtitle">ITSUR | Programación móvil I</string>
     <string name="nav_header_desc">Encabezado del menú</string>
     <string name="action_settings">Configuración</string>
+    <string name="title_activity_vista_detalle">VistaDetalle</string>
 </resources>
