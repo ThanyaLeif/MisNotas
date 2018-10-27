@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.example.tanialeif.misnotas.R;
 
-
 //Esta pantalla va a mostrar la galeria de los archivos multimedia de una nota
 public class DetalleArchivos extends Fragment{
 

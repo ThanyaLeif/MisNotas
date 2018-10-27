@@ -2,6 +2,7 @@ package com.example.tanialeif.misnotas;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -38,6 +39,9 @@ public class ListActivity extends AppCompatActivity
 
     RecyclerView list;
     ListNoteAdapter adapter;
+
+    int REQ_NEW_NOTE = 1;
+    int REQ_MOD_NOTE = 2;
 
     private ArrayList<Note> temporalStaticListExample() {
         ArrayList<Note> listNotes = new ArrayList<>();
@@ -122,8 +126,9 @@ public class ListActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent detail = new Intent(self, VistaDetalle.class);
+
+                startActivityForResult(detail, REQ_NEW_NOTE);
             }
         });
 
