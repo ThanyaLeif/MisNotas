@@ -51,7 +51,7 @@ public class DetalleNota extends Fragment implements View.OnClickListener {
             mes = calendar.get(Calendar.MONTH);
             anio = calendar.get(Calendar.YEAR);
 
-            
+
         }
         if(v==btnHora){
 
