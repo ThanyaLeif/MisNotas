@@ -55,7 +55,6 @@ public class ListMemoAdapter extends RecyclerView.Adapter<ListMemoAdapter.ViewHo
         Memo memo = dataset.get(i);
         viewHolder.date.setText(memo.getDate());
         viewHolder.time.setText(memo.getTime());
-
     }
 
     @Override
@@ -67,14 +66,12 @@ public class ListMemoAdapter extends RecyclerView.Adapter<ListMemoAdapter.ViewHo
 
         public TextView date;
         public TextView time;
-        public Button button;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             date = itemView.findViewById(R.id.memoDate);
             time = itemView.findViewById(R.id.memoTime);
-            button = itemView.findViewById(R.id.btnEliminar);
 
         }
     }
