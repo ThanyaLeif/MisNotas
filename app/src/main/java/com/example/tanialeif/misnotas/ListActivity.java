@@ -330,7 +330,6 @@ public class ListActivity extends AppCompatActivity
         list.setAdapter(adapter);
     }
 
-
     public void showFabSubmenu() {
         fab.animate()
                 .setInterpolator(new DecelerateInterpolator())

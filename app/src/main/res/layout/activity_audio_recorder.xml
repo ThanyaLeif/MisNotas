@@ -4,6 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Media.AudioRecorderActivity">
+    android:background="#fff"
+    tools:context=".AudioRecorderActivity">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomMenu">
+
+            <Button
+                android:id="@+id/btnRecord"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/button_record_audio_background"
+                android:onClick="btnRecord_onClick"/>
+
+            <ImageButton
+                android:id="@+id/btnPlay"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@android:color/transparent"
+                android:tint="@color/colorPrimaryDark"
+                android:src="@drawable/ic_menu_play_32"
+                android:clickable="false"
+                android:onClick="btnPlay_onClick"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomMenu"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        android:background="@drawable/menu_confirm_bottom_background">
+
+        <ImageButton
+            android:id="@+id/btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:tint="#888"
+            android:src="@drawable/ic_menu_clear"
+            android:onClick="btnCancel_onClick"/>
+
+        <ImageButton
+            android:id="@+id/btnConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:tint="@color/colorPrimaryDark"
+            android:src="@drawable/ic_menu_check"
+            android:onClick="btnConfirm_onClick"/>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
