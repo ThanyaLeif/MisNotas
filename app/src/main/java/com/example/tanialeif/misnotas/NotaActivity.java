@@ -9,10 +9,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.tanialeif.misnotas.Adapters.ListMemoAdapter;
 import com.example.tanialeif.misnotas.DB.DAOMemo;
+import com.example.tanialeif.misnotas.DB.DAONote;
 import com.example.tanialeif.misnotas.Model.Memo;
+import com.example.tanialeif.misnotas.Model.Note;
 
 import java.util.ArrayList;
 
@@ -20,6 +24,9 @@ public class NotaActivity extends AppCompatActivity {
 
     RecyclerView list;
     ListMemoAdapter adapter;
+
+    Button btnGuardar;
+    EditText txtTitulo, txtDescripcion, txtFecha, txtHora;
 
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
@@ -58,8 +65,17 @@ public class NotaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nota);
 
         final Context self = this;
-
         final DAOMemo daoMemo = new DAOMemo(self);
+
+        btnGuardar = (Button) findViewById(R.id.btnGuardar);
+
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+                public void onClick(View v) {
+                    insertNote();
+                }
+            }
+        );
 
         daoMemo.insert(temporalStaticListExample().get(0));
         daoMemo.insert(temporalStaticListExample().get(1));
@@ -109,6 +125,26 @@ public class NotaActivity extends AppCompatActivity {
             }
 
         });
+
+    }
+
+    public long insertNote(){
+        txtTitulo = (EditText) findViewById(R.id.txtTitulo);
+        txtDescripcion = (EditText) findViewById(R.id.txtDescripcion);
+        txtFecha = (EditText) findViewById(R.id.txtFecha);
+        txtHora = (EditText) findViewById(R.id.txtHora);
+
+        DAONote daoNote = new DAONote(this);
+        Note note = new Note(
+                1,
+                txtTitulo.getText().toString(),
+                txtDescripcion.getText().toString(),
+                Note.TypeNote.Note,
+                txtFecha.getText().toString(),
+                txtHora.getText().toString()
+        );
+
+        return daoNote.insert(note);
 
     }
 }
