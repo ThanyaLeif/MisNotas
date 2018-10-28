@@ -7,12 +7,14 @@
     android:orientation="horizontal"
     tools:context=".NotaActivity">
 
+    <!--
     <fragment
         android:id="@+id/detalle_archivo_fragment"
         android:name="com.example.tanialeif.misnotas.Fragments.DetalleArchivos"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
+       -->
 
     <fragment
         android:id="@+id/detalle_nota_fragment"

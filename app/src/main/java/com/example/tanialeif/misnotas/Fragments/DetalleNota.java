@@ -1,6 +1,7 @@
 package com.example.tanialeif.misnotas.Fragments;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.tanialeif.misnotas.R;
 
@@ -51,10 +53,28 @@ public class DetalleNota extends Fragment implements View.OnClickListener {
             mes = calendar.get(Calendar.MONTH);
             anio = calendar.get(Calendar.YEAR);
 
-
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    txtFecha.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                }
+            },anio, mes, dia
+            );
+            datePickerDialog.show();
         }
         if(v==btnHora){
+            final Calendar calendar = Calendar.getInstance();
 
+            hora = calendar.get(Calendar.HOUR_OF_DAY);
+            minutos = calendar.get(Calendar.MINUTE);
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    txtHora.setText(hourOfDay+":"+minute);
+                }
+            },hora,minutos,true);
+            timePickerDialog.show();
         }
     }
 }

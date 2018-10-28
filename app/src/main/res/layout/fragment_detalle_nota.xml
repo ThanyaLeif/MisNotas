@@ -19,8 +19,8 @@
         android:text="Descripción"/>
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/txtDescripcion"
         android:hint="Descripción de la nota"/>
 
@@ -29,13 +29,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight=".50"
             android:id="@+id/btnFecha"
             android:text="Fecha"/>
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight=".50"
             android:id="@+id/btnHora"
             android:text="Hora"/>
     </LinearLayout>
@@ -45,12 +47,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight=".50"
             android:id="@+id/txtFecha"/>
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight=".50"
             android:id="@+id/txtHora"/>
     </LinearLayout>
 
