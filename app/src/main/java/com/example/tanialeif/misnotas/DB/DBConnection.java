@@ -8,7 +8,7 @@ public class DBConnection extends SQLiteOpenHelper {
 
     private String CREATE_DB_SCRIPT = "create table note (" +
                     "_id integer primary key autoincrement," +
-                    "_title text, _text text, _type text)";
+                    "_title text, _text text, _type text, _date text, _time text)";
 
     public DBConnection(Context context) {
         super(context, "db_mis_notas", null, 1);

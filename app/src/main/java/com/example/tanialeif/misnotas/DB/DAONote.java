@@ -23,6 +23,9 @@ public class DAONote {
         cv.put("_title", note.getTitle());
         cv.put("_text", note.getText());
         cv.put("_type", note.getType() == Note.TypeNote.Note ? "Note" : "Task");
+        cv.put("_date", note.getDate());
+        cv.put("_time", note.getTime());
+
 
         return db.insert("note", null, cv);
     }
@@ -33,6 +36,8 @@ public class DAONote {
         cv.put("_title", note.getTitle());
         cv.put("_text", note.getText());
         cv.put("_type", note.getType() == Note.TypeNote.Note ? "Note" : "Task");
+        cv.put("_date", note.getDate());
+        cv.put("_time", note.getTime());
 
         return db.update("note", cv, "_id=?",
                 new String[] { String.valueOf(note.getId()) });
@@ -70,7 +75,9 @@ public class DAONote {
                 cursor.getString(2),
                 cursor.getString(3).equals("Note")
                         ? Note.TypeNote.Note
-                        : Note.TypeNote.Task
+                        : Note.TypeNote.Task,
+                cursor.getString(4),
+                cursor.getString(5)
         );
     }
 }
