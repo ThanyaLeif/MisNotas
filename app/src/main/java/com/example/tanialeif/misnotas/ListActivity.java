@@ -1,5 +1,7 @@
 package com.example.tanialeif.misnotas;
 
+import android.animation.Animator;
+import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.DecelerateInterpolator;
 
 import com.example.tanialeif.misnotas.Adapters.ListNoteAdapter;
 import com.example.tanialeif.misnotas.DB.DAONote;
@@ -33,13 +36,19 @@ public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Toolbar toolbar;
-    FloatingActionButton fab;
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     NavigationView navigationView;
 
     RecyclerView list;
     ListNoteAdapter adapter;
+
+    FloatingActionButton fab;
+    View fabGroupNote;
+    FloatingActionButton fabNote;
+    View fabGroupTask;
+    FloatingActionButton fabTask;
+    boolean isFabSubmenuVisible = false;
 
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
@@ -127,8 +136,30 @@ public class ListActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent detail = new Intent(self, VistaDetalle.class);
+                toggleFabSubmenu();
+            }
+        });
 
+        fabGroupNote = findViewById(R.id.fabGroupNote);
+        fabNote = findViewById(R.id.fabNote);
+        fabNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideFabSubmenu();
+                Intent detail = new Intent(self, NotaActivity.class);
+                detail.putExtra("type", "Note");
+                startActivityForResult(detail, REQ_NEW_NOTE);
+            }
+        });
+
+        fabGroupTask = findViewById(R.id.fabGroupTask);
+        fabTask = findViewById(R.id.fabTask);
+        fabTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideFabSubmenu();
+                Intent detail = new Intent(self, NotaActivity.class);
+                detail.putExtra("type", "Task");
                 startActivityForResult(detail, REQ_NEW_NOTE);
             }
         });
@@ -150,6 +181,7 @@ public class ListActivity extends AppCompatActivity
         list.setAdapter(adapter);
 
         adapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+
             @Override
             public boolean onLongClick(View v) {
                 int vid = list.getChildAdapterPosition(v);
@@ -177,7 +209,7 @@ public class ListActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0: {
-                                Intent detail = new Intent(self, VistaDetalle.class);
+                                Intent detail = new Intent(self, NotaActivity.class);
                                 detail.putExtra("id", note.getId());
                                 startActivityForResult(detail, REQ_MOD_NOTE);
                                 break;
@@ -206,6 +238,8 @@ public class ListActivity extends AppCompatActivity
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (isFabSubmenuVisible) {
+            hideFabSubmenu();
         } else {
             super.onBackPressed();
         }
@@ -265,4 +299,79 @@ public class ListActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void showFabSubmenu() {
+        fab.animate()
+                .setInterpolator(new DecelerateInterpolator())
+                .rotation(-270);
+
+        fabGroupNote.setVisibility(View.VISIBLE);
+        fabGroupNote.animate()
+                .setInterpolator(new DecelerateInterpolator())
+                .translationYBy(-getResources().getDimension(R.dimen.fab_sub_margin_bottom_1));
+        fabGroupTask.setVisibility(View.VISIBLE);
+
+        fabGroupTask.animate()
+                .setInterpolator(new DecelerateInterpolator())
+                .translationYBy(-getResources().getDimension(R.dimen.fab_sub_margin_bottom_2))
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        fabGroupNote.setVisibility(View.VISIBLE);
+                        fabGroupTask.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) { }
+                });
+
+        isFabSubmenuVisible = true;
+    }
+
+    public void hideFabSubmenu() {
+        fab.animate()
+                .setInterpolator(new DecelerateInterpolator())
+                .rotation(270);
+
+        fabGroupNote.animate()
+                .setInterpolator(new DecelerateInterpolator())
+                .translationYBy(getResources().getDimension(R.dimen.fab_sub_margin_bottom_1));
+
+
+        fabGroupTask.animate()
+                .setInterpolator(new DecelerateInterpolator())
+                .translationYBy(getResources().getDimension(R.dimen.fab_sub_margin_bottom_2))
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        fabGroupNote.setVisibility(View.GONE);
+                        fabGroupTask.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) { }
+                });
+
+        isFabSubmenuVisible = false;
+    }
+
+    public void toggleFabSubmenu() {
+        if (isFabSubmenuVisible)
+            hideFabSubmenu();
+        else
+            showFabSubmenu();
+    }
+
 }

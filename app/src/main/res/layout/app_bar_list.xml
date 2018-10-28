@@ -22,12 +22,87 @@
 
     <include layout="@layout/content_list" />
 
+    <LinearLayout
+        android:id="@+id/fabGroupTask"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:orientation="horizontal"
+        android:layoutDirection="rtl"
+        android:visibility="gone">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginLeft="0dp"
+            app:fabSize="mini"
+            android:tint="#333"
+            android:backgroundTint="#fff"
+            android:src="@drawable/ic_menu_task" />
+
+        <TextView
+            android:text="Tarea"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:layout_marginRight="0dp"
+            android:padding="6dp"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:background="@drawable/fab_label_background"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fabGroupNote"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:orientation="horizontal"
+        android:layoutDirection="rtl"
+        android:visibility="gone">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginLeft="0dp"
+            app:fabSize="mini"
+            android:tint="#333"
+            android:backgroundTint="#fff"
+            android:src="@drawable/ic_menu_note" />
+
+        <TextView
+            android:text="Nota"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:layout_marginRight="0dp"
+            android:padding="6dp"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:background="@drawable/fab_label_background"/>
+
+    </LinearLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
         android:src="@drawable/ic_menu_add" />
 
 </android.support.design.widget.CoordinatorLayout>
