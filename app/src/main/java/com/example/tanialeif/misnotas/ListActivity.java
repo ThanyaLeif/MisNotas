@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -60,63 +61,81 @@ public class ListActivity extends AppCompatActivity
                 45,
                 "Terminar la app",
                 "Completar la app para movil I.",
-                Note.TypeNote.Note
+                Note.TypeNote.Note,
+                "01/07/18",
+                "09:00"
         ));
 
         listNotes.add(new Note(
                 5,
                 "Hacer el seguidor de lineas",
                 "Jeziel.",
-                Note.TypeNote.Note
+                Note.TypeNote.Note,
+                "01/07/18",
+                "09:00"
         ));
 
         listNotes.add(new Note(
                 45,
                 "Terminar la app",
                 "Completar la app para movil I.",
-                Note.TypeNote.Note
+                Note.TypeNote.Note,
+                "01/07/18",
+                "09:00"
         ));
 
         listNotes.add(new Note(
                 5,
                 "Hacer el seguidor de lineas",
                 "Jeziel.",
-                Note.TypeNote.Note
+                Note.TypeNote.Note,
+                "01/07/18",
+                "09:00"
         ));
 
         listNotes.add(new Note(
                 7,
                 "Proyecto final",
                 "Jeziel.",
-                Note.TypeNote.Task
+                Note.TypeNote.Task,
+                "01/07/18",
+                "09:00"
         ));
 
         listNotes.add(new Note(
                 5,
                 "Proyecto Sistema Chispa",
                 "GPS",
-                Note.TypeNote.Task
+                Note.TypeNote.Task,
+                "01/07/18",
+                "09:00"
         ));
 
         listNotes.add(new Note(
                 7,
                 "Proyecto final",
                 "Jeziel.",
-                Note.TypeNote.Task
+                Note.TypeNote.Task,
+                "01/07/18",
+                "09:00"
         ));
 
         listNotes.add(new Note(
                 5,
                 "Proyecto Sistema Chispa",
                 "GPS",
-                Note.TypeNote.Task
+                Note.TypeNote.Task,
+                "01/07/18",
+                "09:00"
         ));
 
         listNotes.add(new Note(
                 9,
                 "Alguna otra cosa",
                 "...",
-                Note.TypeNote.Note
+                Note.TypeNote.Note,
+                "01/07/18",
+                "09:00"
         ));
 
         return listNotes;
@@ -173,10 +192,12 @@ public class ListActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        final DAONote daoNote = new DAONote(this);
 
+        final DAONote daoNote = new DAONote(this);
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
+
+
         adapter = new ListNoteAdapter(this, daoNote.getAll());
         list.setAdapter(adapter);
 
@@ -299,6 +320,16 @@ public class ListActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        final DAONote daoNote = new DAONote(getApplicationContext());
+        adapter = new ListNoteAdapter(this, daoNote.getAll());
+        list.setAdapter(adapter);
+    }
+
 
     public void showFabSubmenu() {
         fab.animate()
