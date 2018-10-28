@@ -49,5 +49,7 @@ public class NotaActivity extends AppCompatActivity {
         adapter = new ListMemoAdapter(this, temporalStaticListExample());
         list.setAdapter(adapter);
 
+        //TODO: Implementar el onLongClick para las opciones
+
     }
 }
