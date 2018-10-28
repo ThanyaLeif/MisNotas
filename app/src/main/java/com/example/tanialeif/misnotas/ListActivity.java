@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.tanialeif.misnotas.Adapters.ListNoteAdapter;
+import com.example.tanialeif.misnotas.DB.DAONote;
 import com.example.tanialeif.misnotas.Model.Note;
 
 import java.util.ArrayList;
@@ -141,23 +142,57 @@ public class ListActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        final DAONote daoNote = new DAONote(this);
+
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ListNoteAdapter(this, temporalStaticListExample());
+        adapter = new ListNoteAdapter(this, daoNote.getAll());
         list.setAdapter(adapter);
 
         adapter.setOnItemLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                int id = list.getChildAdapterPosition(v);
+                int vid = list.getChildAdapterPosition(v);
+                final Note note = adapter.getItem(vid);
+
+                CharSequence[] options;
+
+                if (note.getType() == Note.TypeNote.Note) {
+                    options = new CharSequence[]  {
+                            "Editar",
+                            "Eliminar"
+                    };
+                } else {
+                    options = new CharSequence[]  {
+                            "Editar",
+                            "Eliminar",
+                            "Marcar como hecha"
+                    };
+                }
 
                 AlertDialog.Builder menu = new AlertDialog.Builder(self);
-                CharSequence[] options = { "Editar", "Eliminar" };
 
                 menu.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        switch (which) {
+                            case 0: {
+                                Intent detail = new Intent(self, VistaDetalle.class);
+                                detail.putExtra("id", note.getId());
+                                startActivityForResult(detail, REQ_MOD_NOTE);
+                                break;
+                            }
+                            case 1: {
+                                daoNote.delete(note.getId());
+                                adapter.updateData(daoNote.getAll());
+                                break;
+                            }
+                            case 2: {
+                                // TODO: MARCAR COMO HECHA
+                                Log.i("ATSARATSA", "Marcar como hecha");
+                                break;
+                            }
+                        }
                     }
                 });
 

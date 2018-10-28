@@ -43,16 +43,21 @@ public class ListNoteAdapter extends RecyclerView.Adapter<ListNoteAdapter.ViewHo
         this.setFilterText("");
     }
 
+    public void updateData(ArrayList<Note> data) {
+        this.dataset = data;
+        recalculateFilter();
+    }
+
     public void setFilter(TypeFilter filter) {
         this.filter = filter;
-        recalcFilter();
+        recalculateFilter();
     }
     public void setFilterText(String s) {
         this.filterText = s.toLowerCase();
-        recalcFilter();
+        recalculateFilter();
     }
 
-    public void recalcFilter() {
+    public void recalculateFilter() {
         filteredDataset = new ArrayList<>();
         filteredIndexes = new ArrayList<>();
 
@@ -79,7 +84,6 @@ public class ListNoteAdapter extends RecyclerView.Adapter<ListNoteAdapter.ViewHo
 
         notifyDataSetChanged();
     }
-
 
     public void setOnItemLongClickListener(View.OnLongClickListener onLongClickListener) {
         this.onLongClickListener = onLongClickListener;
@@ -112,6 +116,11 @@ public class ListNoteAdapter extends RecyclerView.Adapter<ListNoteAdapter.ViewHo
     @Override
     public int getItemCount() {
         return filteredDataset.size();
+    }
+
+    public Note getItem(int position) {
+        int rid = filteredIndexes.get(position);
+        return dataset.get(rid);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
