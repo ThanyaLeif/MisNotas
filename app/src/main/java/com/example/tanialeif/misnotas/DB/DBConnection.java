@@ -14,6 +14,10 @@ public class DBConnection extends SQLiteOpenHelper {
             "_id integer primary key autoincrement," +
             "_idNote integer, _date text, _time text)";
 
+    private String CREATE_TABLE_MEDIA ="create table media (" +
+            "_id integer primary key autoincrement," +
+            "_archivo text, _idImage integer, _idNote integer)";
+
     public DBConnection(Context context) {
         super(context, "db_mis_notas", null, 4);
     }
@@ -22,6 +26,7 @@ public class DBConnection extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_DB_SCRIPT);
         db.execSQL(CREATE_TABLE_MEMO);
+        db.execSQL(CREATE_TABLE_MEDIA);
     }
 
     @Override
