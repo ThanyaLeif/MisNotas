@@ -12,10 +12,8 @@
         <activity
             android:name=".ListActivity"
             android:label="@string/title_activity_list"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:name=".MainActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".VistaDetalle"
             android:label="@string/title_activity_vista_detalle"
@@ -27,6 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MemoActivity"
+            android:label="@string/title_activity_memo"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

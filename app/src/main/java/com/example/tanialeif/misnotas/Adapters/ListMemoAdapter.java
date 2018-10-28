@@ -40,6 +40,10 @@ public class ListMemoAdapter extends RecyclerView.Adapter<ListMemoAdapter.ViewHo
         this.onLongClickListener = onLongClickListener;
     }
 
+    public Memo getItem(int position){
+        return dataset.get(position);
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

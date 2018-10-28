@@ -10,17 +10,25 @@ public class DBConnection extends SQLiteOpenHelper {
                     "_id integer primary key autoincrement," +
                     "_title text, _text text, _type text, _date text, _time text)";
 
+    private String CREATE_TABLE_MEMO ="create table memo (" +
+            "_id integer primary key autoincrement," +
+            "_idNote integer, _date text, _time text)";
+
     public DBConnection(Context context) {
-        super(context, "db_mis_notas", null, 1);
+        super(context, "db_mis_notas", null, 4);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_DB_SCRIPT);
+        db.execSQL(CREATE_TABLE_MEMO);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS note");
+        db.execSQL("DROP TABLE IF EXISTS memo");
 
+        onCreate(db);
     }
 }
