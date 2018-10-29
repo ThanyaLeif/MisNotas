@@ -7,15 +7,15 @@
         <item
             android:id="@+id/nav_all"
             android:icon="@drawable/ic_menu_home"
-            android:title="Todas" />
+            android:title="@string/nav_drawer_opt_all" />
         <item
             android:id="@+id/nav_notes"
             android:icon="@drawable/ic_menu_note"
-            android:title="Notas" />
+            android:title="@string/nav_drawer_opt_notes" />
         <item
             android:id="@+id/nav_tasks"
             android:icon="@drawable/ic_menu_task"
-            android:title="Tareas" />
+            android:title="@string/nav_drawer_opt_tasks" />
     </group>
 
     <item android:title="Otros">
@@ -23,7 +23,7 @@
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Configuración" />
+                android:title="@string/nav_drawer_opt_settings" />
         </menu>
     </item>
 

@@ -10,7 +10,7 @@
     <string name="action_settings">Configuración</string>
     <string name="title_activity_vista_detalle">VistaDetalle</string>
     <string name="title_activity_memo">MemoActivity</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Preferencias</string>
     <string name="nav_drawer_opt_all">Todas</string>
     <string name="nav_drawer_opt_notes">Notas</string>
     <string name="nav_drawer_opt_tasks">Tareas</string>

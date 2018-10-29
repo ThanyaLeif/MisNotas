@@ -45,7 +45,7 @@
             android:src="@drawable/ic_menu_task" />
 
         <TextView
-            android:text="Tarea"
+            android:text="@string/txt_task"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_margin="8dp"
@@ -82,7 +82,7 @@
             android:src="@drawable/ic_menu_note" />
 
         <TextView
-            android:text="Nota"
+            android:text="@string/txt_note"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_margin="8dp"
