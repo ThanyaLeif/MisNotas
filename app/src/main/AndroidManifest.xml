@@ -16,23 +16,23 @@
         <activity
             android:name=".ListActivity"
             android:label="@string/title_activity_list"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:name=".NotaActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".NotaActivity" />
         <activity
             android:name=".MemoActivity"
             android:label="@string/title_activity_memo"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".AudioRecorderActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AudioRecorderActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
+        </activity>
+        <activity android:name=".PruebasGaleria">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 
