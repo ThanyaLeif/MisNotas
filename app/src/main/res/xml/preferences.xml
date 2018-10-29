@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="General">
+
+        <ListPreference
+            android:key="language"
+            android:title="Idioma"
+            android:defaultValue="spanish"
+            android:entries="@array/language_options"
+            android:entryValues="@array/language_values"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Notificaciones">
+
+        <CheckBoxPreference
+            android:key="notifications"
+            android:title="Activar las notificaciones"
+            android:defaultValue="true" />
+
+        <RingtonePreference
+            android:key="ringtone"
+            android:title="Tono" />
+
+        <CheckBoxPreference
+            android:key="buzzer"
+            android:title="Vibrador" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

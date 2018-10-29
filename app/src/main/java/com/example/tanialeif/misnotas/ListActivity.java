@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -314,7 +315,8 @@ public class ListActivity extends AppCompatActivity
             adapter.setFilter(ListNoteAdapter.TypeFilter.Tasks);
             adapter.notifyDataSetChanged();
         } else if (id == R.id.nav_settings) {
-            // TODO: CREATE SETTINGS SCREEN
+            Intent settings = new Intent(this, PreferencesActivity.class);
+            startActivity(settings);
         }
 
         drawer.closeDrawer(GravityCompat.START);
