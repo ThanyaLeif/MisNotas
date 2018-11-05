@@ -38,5 +38,10 @@
         android:layout_height="wrap_content"
         android:text="Guardar"
         android:id="@+id/btnGuardar"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Agregar multimedia"
+        android:id="@+id/btnAgregarMultimedia" />
 
 </LinearLayout>
