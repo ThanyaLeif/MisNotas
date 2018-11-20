@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 public class DetalleNota extends Fragment implements View.OnClickListener {
 
-    EditText txtFecha, txtHora;
+    TextView txtFecha, txtHora;
     Button btnFecha, btnHora;
 
     private int dia, mes, anio, hora, minutos;
@@ -35,8 +35,8 @@ public class DetalleNota extends Fragment implements View.OnClickListener {
 
         btnFecha = (Button)view.findViewById(R.id.btnFecha);
         btnHora = (Button)view.findViewById(R.id.btnHora);
-        txtFecha = (EditText)view.findViewById(R.id.txtFecha);
-        txtHora = (EditText)view.findViewById(R.id.txtHora);
+        txtFecha = (TextView) view.findViewById(R.id.txtFecha);
+        txtHora = (TextView) view.findViewById(R.id.txtHora);
 
         btnFecha.setOnClickListener(this);
         btnHora.setOnClickListener(this);

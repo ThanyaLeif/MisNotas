@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -39,7 +40,8 @@ public class NotaActivity extends AppCompatActivity {
     ListMemoAdapter adapter;
 
     Button btnGuardar, btnAgregarMultimedia;
-    EditText txtTitulo, txtDescripcion, txtFecha, txtHora;
+    EditText txtTitulo, txtDescripcion;
+    TextView txtFecha, txtHora;
 
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
@@ -279,8 +281,8 @@ public class NotaActivity extends AppCompatActivity {
     public long insertNote(){
         txtTitulo = (EditText) findViewById(R.id.txtTitulo);
         txtDescripcion = (EditText) findViewById(R.id.txtDescripcion);
-        txtFecha = (EditText) findViewById(R.id.txtFecha);
-        txtHora = (EditText) findViewById(R.id.txtHora);
+        txtFecha = (TextView) findViewById(R.id.txtFecha);
+        txtHora = (TextView) findViewById(R.id.txtHora);
 
         DAONote daoNote = new DAONote(this);
         Note note = new Note(

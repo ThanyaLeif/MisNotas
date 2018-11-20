@@ -46,15 +46,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <EditText
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".50"
+            android:text="--/--/--"
             android:id="@+id/txtFecha"/>
-        <EditText
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".50"
+            android:text="--:--"
             android:id="@+id/txtHora"/>
     </LinearLayout>
 
