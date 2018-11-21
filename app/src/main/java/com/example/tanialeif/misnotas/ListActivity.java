@@ -55,7 +55,7 @@ public class ListActivity extends AppCompatActivity
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
 
-    private ArrayList<Note> temporalStaticListExample() {
+ /*   private ArrayList<Note> temporalStaticListExample() {
         ArrayList<Note> listNotes = new ArrayList<>();
 
         listNotes.add(new Note(
@@ -140,7 +140,7 @@ public class ListActivity extends AppCompatActivity
         ));
 
         return listNotes;
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

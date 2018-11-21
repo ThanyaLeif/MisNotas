@@ -29,7 +29,10 @@ import com.example.tanialeif.misnotas.DB.DAONote;
 import com.example.tanialeif.misnotas.Model.Memo;
 import com.example.tanialeif.misnotas.Model.Note;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission_group.CAMERA;
@@ -138,8 +141,8 @@ public class NotaActivity extends AppCompatActivity {
 
         });
 
-        daoMemo.insert(temporalStaticListExample().get(0));
-        daoMemo.insert(temporalStaticListExample().get(1));
+        //daoMemo.insert(temporalStaticListExample().get(0));
+        //daoMemo.insert(temporalStaticListExample().get(1));
 
         list = findViewById(R.id.listMemo);
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -283,6 +286,7 @@ public class NotaActivity extends AppCompatActivity {
         txtDescripcion = (EditText) findViewById(R.id.txtDescripcion);
         txtFecha = (TextView) findViewById(R.id.txtFecha);
         txtHora = (TextView) findViewById(R.id.txtHora);
+        SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy");
 
         DAONote daoNote = new DAONote(this);
         Note note = new Note(
@@ -291,7 +295,10 @@ public class NotaActivity extends AppCompatActivity {
                 txtDescripcion.getText().toString(),
                 Note.TypeNote.Note,
                 txtFecha.getText().toString(),
-                txtHora.getText().toString()
+                txtHora.getText().toString(),
+                false,
+                simpleDate.format(Calendar.getInstance().getTime())
+                //Agregar parámetros del dao
         );
 
         return daoNote.insert(note);

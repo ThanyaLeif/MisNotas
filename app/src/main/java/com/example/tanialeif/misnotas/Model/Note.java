@@ -10,6 +10,8 @@ public class Note {
     private TypeNote type;
     private String date;
     private String time;
+    private boolean checked;
+    private String actualDate;
 
     public Note(long id, String title, String text, TypeNote type) {
         this.id = id;
@@ -18,13 +20,16 @@ public class Note {
         this.type = type;
     }
 
-    public Note(long id, String title, String text, TypeNote type, String date, String time) {
+    public Note(long id, String title, String text, TypeNote type, String date, String time,
+                boolean checked, String actualDate) {
         this.id = id;
         this.title = title;
         this.text = text;
         this.type = type;
         this.date = date;
         this.time = time;
+        this.checked = checked;
+        this.actualDate = actualDate;
     }
 
     public long getId() {
@@ -66,4 +71,12 @@ public class Note {
     public String getTime() {return time;}
 
     public void setTime(String time) {this.time = time;}
+
+    public boolean isChecked() { return checked; }
+
+    public void setChecked(boolean checked) { this.checked = checked; }
+
+    public String getActualDate() { return actualDate; }
+
+    public void setActualDate(String actualDate) { this.actualDate = actualDate; }
 }

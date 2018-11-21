@@ -8,7 +8,8 @@ public class DBConnection extends SQLiteOpenHelper {
 
     private String CREATE_DB_SCRIPT = "create table note (" +
                     "_id integer primary key autoincrement," +
-                    "_title text, _text text, _type text, _date text, _time text)";
+                    "_title text, _text text, _type text, _date text, _time text,"+
+                    " _checked boolean, _actualDate text)";
 
     private String CREATE_TABLE_MEMO ="create table memo (" +
             "_id integer primary key autoincrement," +
@@ -19,7 +20,7 @@ public class DBConnection extends SQLiteOpenHelper {
             "_archivo text, _idImage integer, _idNote integer)";
 
     public DBConnection(Context context) {
-        super(context, "db_mis_notas", null, 4);
+        super(context, "db_mis_notas", null, 5);
     }
 
     @Override

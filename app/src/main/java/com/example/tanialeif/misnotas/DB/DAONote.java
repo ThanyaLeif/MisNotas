@@ -77,7 +77,9 @@ public class DAONote {
                         ? Note.TypeNote.Note
                         : Note.TypeNote.Task,
                 cursor.getString(4),
-                cursor.getString(5)
+                cursor.getString(5),
+                cursor.getInt(6) > 0,
+                cursor.getString(7)
         );
     }
 }
