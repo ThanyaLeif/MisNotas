@@ -35,7 +35,8 @@ import com.example.tanialeif.misnotas.Model.Note;
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+                   View.OnLongClickListener {
 
     Toolbar toolbar;
     DrawerLayout drawer;
@@ -55,92 +56,6 @@ public class ListActivity extends AppCompatActivity
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
 
- /*   private ArrayList<Note> temporalStaticListExample() {
-        ArrayList<Note> listNotes = new ArrayList<>();
-
-        listNotes.add(new Note(
-                45,
-                "Terminar la app",
-                "Completar la app para movil I.",
-                Note.TypeNote.Note,
-                "01/07/18",
-                "09:00"
-        ));
-
-        listNotes.add(new Note(
-                5,
-                "Hacer el seguidor de lineas",
-                "Jeziel.",
-                Note.TypeNote.Note,
-                "01/07/18",
-                "09:00"
-        ));
-
-        listNotes.add(new Note(
-                45,
-                "Terminar la app",
-                "Completar la app para movil I.",
-                Note.TypeNote.Note,
-                "01/07/18",
-                "09:00"
-        ));
-
-        listNotes.add(new Note(
-                5,
-                "Hacer el seguidor de lineas",
-                "Jeziel.",
-                Note.TypeNote.Note,
-                "01/07/18",
-                "09:00"
-        ));
-
-        listNotes.add(new Note(
-                7,
-                "Proyecto final",
-                "Jeziel.",
-                Note.TypeNote.Task,
-                "01/07/18",
-                "09:00"
-        ));
-
-        listNotes.add(new Note(
-                5,
-                "Proyecto Sistema Chispa",
-                "GPS",
-                Note.TypeNote.Task,
-                "01/07/18",
-                "09:00"
-        ));
-
-        listNotes.add(new Note(
-                7,
-                "Proyecto final",
-                "Jeziel.",
-                Note.TypeNote.Task,
-                "01/07/18",
-                "09:00"
-        ));
-
-        listNotes.add(new Note(
-                5,
-                "Proyecto Sistema Chispa",
-                "GPS",
-                Note.TypeNote.Task,
-                "01/07/18",
-                "09:00"
-        ));
-
-        listNotes.add(new Note(
-                9,
-                "Alguna otra cosa",
-                "...",
-                Note.TypeNote.Note,
-                "01/07/18",
-                "09:00"
-        ));
-
-        return listNotes;
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,67 +108,14 @@ public class ListActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         final DAONote daoNote = new DAONote(this);
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
 
-
         adapter = new ListNoteAdapter(this, daoNote.getAll());
         list.setAdapter(adapter);
+        adapter.setOnItemLongClickListener(this);
 
-        adapter.setOnItemLongClickListener(new View.OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View v) {
-                int vid = list.getChildAdapterPosition(v);
-                final Note note = adapter.getItem(vid);
-
-                CharSequence[] options;
-
-                if (note.getType() == Note.TypeNote.Note) {
-                    options = new CharSequence[]  {
-                            "Editar",
-                            "Eliminar"
-                    };
-                } else {
-                    options = new CharSequence[]  {
-                            "Editar",
-                            "Eliminar",
-                            "Marcar como hecha"
-                    };
-                }
-
-                AlertDialog.Builder menu = new AlertDialog.Builder(self);
-
-                menu.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0: {
-                                Intent detail = new Intent(self, NotaActivity.class);
-                                detail.putExtra("id", note.getId());
-                                startActivityForResult(detail, REQ_MOD_NOTE);
-                                break;
-                            }
-                            case 1: {
-                                daoNote.delete(note.getId());
-                                adapter.updateData(daoNote.getAll());
-                                break;
-                            }
-                            case 2: {
-                                // TODO: MARCAR COMO HECHA
-                                Log.i("ATSARATSA", "Marcar como hecha");
-                                break;
-                            }
-                        }
-                    }
-                });
-
-                menu.show();
-                return true;
-            }
-        });
     }
 
     @Override
@@ -330,6 +192,7 @@ public class ListActivity extends AppCompatActivity
         final DAONote daoNote = new DAONote(getApplicationContext());
         adapter = new ListNoteAdapter(this, daoNote.getAll());
         list.setAdapter(adapter);
+        adapter.setOnItemLongClickListener(this);
     }
 
     public void showFabSubmenu() {
@@ -406,4 +269,56 @@ public class ListActivity extends AppCompatActivity
             showFabSubmenu();
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        int vid = list.getChildAdapterPosition(v);
+        final Note note = adapter.getItem(vid);
+        final Context self = this;
+        final DAONote daoNote = new DAONote(this);
+
+        CharSequence[] options;
+
+        if (note.getType() == Note.TypeNote.Note) {
+            options = new CharSequence[]  {
+                    "Editar",
+                    "Eliminar"
+            };
+        } else {
+            options = new CharSequence[]  {
+                    "Editar",
+                    "Eliminar",
+                    "Marcar como hecha"
+            };
+        }
+
+        AlertDialog.Builder menu = new AlertDialog.Builder(this);
+
+        menu.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: {
+                        Intent detail = new Intent(self, NotaActivity.class);
+                        detail.putExtra("id", note.getId());
+                        detail.putExtra("type", note.getType() == Note.TypeNote.Note ? "Note" : "Task");
+                        startActivityForResult(detail, REQ_MOD_NOTE);
+                        break;
+                    }
+                    case 1: {
+                        daoNote.delete(note.getId());
+                        adapter.updateData(daoNote.getAll());
+                        break;
+                    }
+                    case 2: {
+                        // TODO: MARCAR COMO HECHA
+                        Log.i("ATSARATSA", "Marcar como hecha");
+                        break;
+                    }
+                }
+            }
+        });
+
+        menu.show();
+        return true;
+    }
 }
