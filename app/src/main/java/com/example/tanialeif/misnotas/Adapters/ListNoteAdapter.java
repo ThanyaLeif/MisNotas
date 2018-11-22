@@ -2,6 +2,7 @@ package com.example.tanialeif.misnotas.Adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -111,6 +112,10 @@ public class ListNoteAdapter extends RecyclerView.Adapter<ListNoteAdapter.ViewHo
                 R.drawable.ic_menu_task;
 
         viewHolder.icon.setImageResource(icon);
+
+        if (note.isChecked())
+            viewHolder.icon.setColorFilter(Color.rgb(189, 195, 199));
+
     }
 
     @Override

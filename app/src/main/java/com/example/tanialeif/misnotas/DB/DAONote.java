@@ -25,7 +25,8 @@ public class DAONote {
         cv.put("_type", note.getType() == Note.TypeNote.Note ? "Note" : "Task");
         cv.put("_date", note.getDate());
         cv.put("_time", note.getTime());
-
+        cv.put("_checked", note.isChecked() ? 1 : 0);
+        cv.put("_actualDate", note.getActualDate());
 
         return db.insert("note", null, cv);
     }
@@ -38,6 +39,8 @@ public class DAONote {
         cv.put("_type", note.getType() == Note.TypeNote.Note ? "Note" : "Task");
         cv.put("_date", note.getDate());
         cv.put("_time", note.getTime());
+        cv.put("_checked", note.isChecked() ? 1 : 0);
+        cv.put("_actualDate", note.getActualDate());
 
         return db.update("note", cv, "_id=?",
                 new String[] { String.valueOf(note.getId()) });
