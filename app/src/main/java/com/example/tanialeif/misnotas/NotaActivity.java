@@ -29,6 +29,7 @@ import com.example.tanialeif.misnotas.DB.DAONote;
 import com.example.tanialeif.misnotas.Model.Memo;
 import com.example.tanialeif.misnotas.Model.Note;
 
+import java.io.Console;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +46,7 @@ public class NotaActivity extends AppCompatActivity {
     Button btnGuardar, btnAgregarMultimedia;
     EditText txtTitulo, txtDescripcion;
     TextView txtFecha, txtHora;
+    Button btnFecha, btnHora;
 
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
@@ -52,6 +54,8 @@ public class NotaActivity extends AppCompatActivity {
 
     boolean allowetToUseCamera = false;
     boolean allowetToUseAudio = false;
+
+    String type_note;
 
     private ArrayList<Memo> temporalStaticListExample() {
         ArrayList<Memo> listMemo = new ArrayList<>();
@@ -87,6 +91,26 @@ public class NotaActivity extends AppCompatActivity {
 
         final Context self = this;
         final DAOMemo daoMemo = new DAOMemo(self);
+
+        btnFecha = (Button)findViewById(R.id.btnFecha);
+        btnHora = (Button)findViewById(R.id.btnHora);
+
+        txtTitulo = (EditText) findViewById(R.id.txtTitulo);
+        txtDescripcion = (EditText) findViewById(R.id.txtDescripcion);
+        txtFecha = (TextView) findViewById(R.id.txtFecha);
+        txtHora = (TextView) findViewById(R.id.txtHora);
+
+        type_note = getIntent().getStringExtra("type");
+
+        txtTitulo.setText(type_note);
+
+        if(type_note.equals("Note")){
+            btnFecha.setVisibility(View.INVISIBLE);
+            btnHora.setVisibility(View.INVISIBLE);
+            txtFecha.setVisibility(View.INVISIBLE);
+            txtHora.setVisibility(View.INVISIBLE);
+        }
+
 
         btnGuardar = (Button) findViewById(R.id.btnGuardar);
 
@@ -190,6 +214,7 @@ public class NotaActivity extends AppCompatActivity {
 
         });
 
+
     }
 
     private void validarCamara(){
@@ -258,6 +283,7 @@ public class NotaActivity extends AppCompatActivity {
         else{
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},101);
         }
+
     }
 
     @Override
@@ -282,10 +308,6 @@ public class NotaActivity extends AppCompatActivity {
     }
 
     public long insertNote(){
-        txtTitulo = (EditText) findViewById(R.id.txtTitulo);
-        txtDescripcion = (EditText) findViewById(R.id.txtDescripcion);
-        txtFecha = (TextView) findViewById(R.id.txtFecha);
-        txtHora = (TextView) findViewById(R.id.txtHora);
         SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy");
 
         DAONote daoNote = new DAONote(this);
@@ -293,12 +315,11 @@ public class NotaActivity extends AppCompatActivity {
                 1,
                 txtTitulo.getText().toString(),
                 txtDescripcion.getText().toString(),
-                Note.TypeNote.Note,
+                type_note == "Note" ? Note.TypeNote.Note : Note.TypeNote.Task,
                 txtFecha.getText().toString(),
                 txtHora.getText().toString(),
                 false,
                 simpleDate.format(Calendar.getInstance().getTime())
-                //Agregar parámetros del dao
         );
 
         return daoNote.insert(note);
