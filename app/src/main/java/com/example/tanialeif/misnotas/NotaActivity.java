@@ -315,7 +315,7 @@ public class NotaActivity extends AppCompatActivity {
                 1,
                 txtTitulo.getText().toString(),
                 txtDescripcion.getText().toString(),
-                type_note == "Note" ? Note.TypeNote.Note : Note.TypeNote.Task,
+                type_note.equals("Note") ? Note.TypeNote.Note : Note.TypeNote.Task,
                 txtFecha.getText().toString(),
                 txtHora.getText().toString(),
                 false,
