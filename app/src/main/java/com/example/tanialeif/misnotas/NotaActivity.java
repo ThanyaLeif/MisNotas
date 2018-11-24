@@ -50,7 +50,7 @@ public class NotaActivity extends AppCompatActivity {
 
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
-    int ID_NOTA = 1;
+    long ID_NOTA = -1;
 
     boolean allowetToUseCamera = false;
     boolean allowetToUseAudio = false;
@@ -102,8 +102,6 @@ public class NotaActivity extends AppCompatActivity {
 
         type_note = getIntent().getStringExtra("type");
 
-        txtTitulo.setText(type_note);
-
         if(type_note.equals("Note")){
             btnFecha.setVisibility(View.INVISIBLE);
             btnHora.setVisibility(View.INVISIBLE);
@@ -111,13 +109,23 @@ public class NotaActivity extends AppCompatActivity {
             txtHora.setVisibility(View.INVISIBLE);
         }
 
+        ID_NOTA = getIntent().getLongExtra("id",-1);
+
+        if(ID_NOTA != -1){
+            isModification(ID_NOTA);
+        }
 
         btnGuardar = (Button) findViewById(R.id.btnGuardar);
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
                 public void onClick(View v) {
-                    insertNote();
+                    if(ID_NOTA==-1) {
+                        insertNote();
+                    }
+                    else{
+                        editNote(ID_NOTA);
+                    }
                 }
             }
         );
@@ -215,6 +223,15 @@ public class NotaActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void isModification(long id){
+        DAONote daoNote = new DAONote(this);
+        Note note = daoNote.get(id);
+        txtTitulo.setText(note.getTitle());
+        txtDescripcion.setText(note.getText());
+        txtHora.setText(note.getTime());
+        txtFecha.setText(note.getDate());
     }
 
     private void validarCamara(){
@@ -323,6 +340,23 @@ public class NotaActivity extends AppCompatActivity {
         );
 
         return daoNote.insert(note);
+
+    }
+
+    public void editNote(long id){
+        DAONote daoNote = new DAONote(this);
+        Note note = daoNote.get(id);
+        Note updatedNote = new Note(
+                note.getId(),
+                txtTitulo.getText().toString(),
+                txtDescripcion.getText().toString(),
+                note.getType(),
+                txtFecha.getText().toString(),
+                txtHora.getText().toString(),
+                false,
+                note.getActualDate()
+        );
+        daoNote.update(updatedNote);
 
     }
 }

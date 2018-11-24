@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Toast;
 
 import com.example.tanialeif.misnotas.Adapters.ListNoteAdapter;
 import com.example.tanialeif.misnotas.DB.DAONote;
@@ -298,6 +299,7 @@ public class ListActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0: {
+                        //Toast.makeText(self,note.getId() + "g",Toast.LENGTH_SHORT);
                         Intent detail = new Intent(self, NotaActivity.class);
                         detail.putExtra("id", note.getId());
                         detail.putExtra("type", note.getType() == Note.TypeNote.Note ? "Note" : "Task");
