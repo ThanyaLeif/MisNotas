@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -43,19 +45,24 @@ public class NotaActivity extends AppCompatActivity {
     RecyclerView list;
     ListMemoAdapter adapter;
 
-    Button btnGuardar, btnAgregarMultimedia;
+    Button btnGuardar;
+    FloatingActionButton btnAgregarMultimedia;
     EditText txtTitulo, txtDescripcion;
     TextView txtFecha, txtHora;
     Button btnFecha, btnHora;
 
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
+    int INSERT_MEMO = 3
+            ;
     long ID_NOTA = -1;
 
     boolean allowetToUseCamera = false;
     boolean allowetToUseAudio = false;
 
     String type_note;
+
+    ArrayList<Memo> temporalMemo = new ArrayList<>();
 
     private ArrayList<Memo> temporalStaticListExample() {
         ArrayList<Memo> listMemo = new ArrayList<>();
@@ -121,7 +128,8 @@ public class NotaActivity extends AppCompatActivity {
             @Override
                 public void onClick(View v) {
                     if(ID_NOTA==-1) {
-                        insertNote();
+                        long id = insertNote();
+                        insertMemo(id);
                     }
                     else{
                         editNote(ID_NOTA);
@@ -130,14 +138,15 @@ public class NotaActivity extends AppCompatActivity {
             }
         );
 
-        btnAgregarMultimedia = (Button) findViewById(R.id.btnAgregarMultimedia);
+        btnAgregarMultimedia = (FloatingActionButton) findViewById(R.id.btnAgregarMultimedia);
 
         btnAgregarMultimedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CharSequence[] options = new CharSequence[]  {
                         "Audio",
-                        "Camara"
+                        "Camara",
+                        "Recordatorio"
                 };
                 AlertDialog.Builder menu = new AlertDialog.Builder(self);
 
@@ -164,6 +173,11 @@ public class NotaActivity extends AppCompatActivity {
                                 }
                                 break;
                             }
+
+                            case 2: {
+                                Intent detail = new Intent(self, MemoActivity.class);
+                                startActivityForResult(detail,INSERT_MEMO);
+                            }
                         }
                     }
                 });
@@ -178,7 +192,7 @@ public class NotaActivity extends AppCompatActivity {
 
         list = findViewById(R.id.listMemo);
         list.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ListMemoAdapter(this, daoMemo.getAll(1));
+        adapter = new ListMemoAdapter(this, daoMemo.getAll(ID_NOTA));
         list.setAdapter(adapter);
 
         adapter.setOnItemLongClickListener(new View.OnLongClickListener() {
@@ -324,6 +338,14 @@ public class NotaActivity extends AppCompatActivity {
         }
     }
 
+    public void insertMemo(long id){
+        DAOMemo daoMemo = new DAOMemo(this);
+        for(int i=0; i<temporalMemo.size(); i++){
+            temporalMemo.get(i).setIdNote(id);
+            daoMemo.insert(temporalMemo.get(i));
+        }
+    }
+
     public long insertNote(){
         SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy");
 
@@ -357,6 +379,17 @@ public class NotaActivity extends AppCompatActivity {
                 note.getActualDate()
         );
         daoNote.update(updatedNote);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == INSERT_MEMO){
+            Memo memo = (Memo)data.getExtras().getSerializable("memo");
+            temporalMemo.add(memo);
+        }
 
     }
 }

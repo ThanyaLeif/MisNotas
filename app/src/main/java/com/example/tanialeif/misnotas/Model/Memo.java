@@ -1,6 +1,8 @@
 package com.example.tanialeif.misnotas.Model;
 
-public class Memo {
+import java.io.Serializable;
+
+public class Memo implements Serializable{
     private long id;
     private String date;
     private  String time;
