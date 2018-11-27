@@ -27,7 +27,7 @@ public class MemoActivity extends AppCompatActivity {
 
     private int dia, mes, anio, hora, minutos;
 
-    int INSERT_MEMO = 1;
+    int INSERT_MEMO = 3;
 
     final Context self = this;
 

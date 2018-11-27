@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -26,12 +28,15 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.tanialeif.misnotas.Adapters.ListMemoAdapter;
+import com.example.tanialeif.misnotas.DB.DAOMedia;
 import com.example.tanialeif.misnotas.DB.DAOMemo;
 import com.example.tanialeif.misnotas.DB.DAONote;
+import com.example.tanialeif.misnotas.Model.Media;
 import com.example.tanialeif.misnotas.Model.Memo;
 import com.example.tanialeif.misnotas.Model.Note;
 
 import java.io.Console;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,8 +58,8 @@ public class NotaActivity extends AppCompatActivity {
 
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
-    int INSERT_MEMO = 3
-            ;
+    int INSERT_MEMO = 3;
+    int INSERT_AUDIO = 4;
     long ID_NOTA = -1;
 
     boolean allowetToUseCamera = false;
@@ -63,33 +68,7 @@ public class NotaActivity extends AppCompatActivity {
     String type_note;
 
     ArrayList<Memo> temporalMemo = new ArrayList<>();
-
-    private ArrayList<Memo> temporalStaticListExample() {
-        ArrayList<Memo> listMemo = new ArrayList<>();
-
-        listMemo.add(new Memo(
-                45,
-                "29/11/2018",
-                "21:00",
-                1
-        ));
-
-        listMemo.add(new Memo(
-                5,
-                "8/11/2018",
-                "23:09",
-                1
-        ));
-
-        listMemo.add(new Memo(
-                198,
-                "09/12/1998",
-                "3:12",
-                2
-        ));
-
-        return listMemo;
-    }
+    ArrayList<Media> temporalMedia = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,9 +109,12 @@ public class NotaActivity extends AppCompatActivity {
                     if(ID_NOTA==-1) {
                         long id = insertNote();
                         insertMemo(id);
+                        insertMedia(id);
                     }
                     else{
                         editNote(ID_NOTA);
+                        insertMemo(ID_NOTA);
+                        insertMedia(ID_NOTA);
                     }
                 }
             }
@@ -158,7 +140,7 @@ public class NotaActivity extends AppCompatActivity {
                                 validarAudio();
                                 if(allowetToUseAudio) {
                                     Intent detail = new Intent(self, AudioRecorderActivity.class);
-                                    startActivity(detail);
+                                    startActivityForResult(detail,INSERT_AUDIO);
                                 }
                                 else{
                                     Toast.makeText(self,"No hay permisos suficientes",Toast.LENGTH_SHORT).show();
@@ -186,9 +168,6 @@ public class NotaActivity extends AppCompatActivity {
             }
 
         });
-
-        //daoMemo.insert(temporalStaticListExample().get(0));
-        //daoMemo.insert(temporalStaticListExample().get(1));
 
         list = findViewById(R.id.listMemo);
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -346,6 +325,35 @@ public class NotaActivity extends AppCompatActivity {
         }
     }
 
+    public void insertMedia(long id){
+        DAOMedia daoMedia = new DAOMedia(this);
+
+        for (int i=0; i<temporalMedia.size(); i++){
+
+            Media actual = temporalMedia.get(i);
+
+            if(actual.getType().toString().equals("Audio")){
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS);
+                File file = new File(path, "tmp"+i+".3gp");
+
+                txtTitulo.setText("Si");
+
+                actual.setIdNote(id);
+
+                long idMedia = daoMedia.insert(actual);
+
+                actual.setArchivo(Environment.DIRECTORY_PODCASTS+"audio"+idMedia+".3gp");
+                actual.setId(idMedia);
+
+                daoMedia.update(actual);
+
+                File newPath = new File(path, "audio"+idMedia+".3gp");
+                file.renameTo(newPath);
+            }
+        }
+
+    }
+
     public long insertNote(){
         SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy");
 
@@ -364,6 +372,8 @@ public class NotaActivity extends AppCompatActivity {
         return daoNote.insert(note);
 
     }
+
+
 
     public void editNote(long id){
         DAONote daoNote = new DAONote(this);
@@ -389,6 +399,28 @@ public class NotaActivity extends AppCompatActivity {
         if(requestCode == INSERT_MEMO){
             Memo memo = (Memo)data.getExtras().getSerializable("memo");
             temporalMemo.add(memo);
+        }
+
+        if(requestCode == INSERT_AUDIO){
+
+            if(resultCode == RESULT_OK) {
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS);
+                File file = new File(path, "tmp_recording.3gp");
+
+                File newPath = new File(path, "tmp" + temporalMedia.size() + ".3gp");
+                file.renameTo(newPath);
+
+                Media media = new Media(
+                        1,
+                        "audio" + temporalMedia.size() + ".3gp",
+                        "R.drawable.fondo1.png",
+                        Media.TypeMedia.Audio,
+                        1
+                );
+
+                temporalMedia.add(media);
+            }
+
         }
 
     }

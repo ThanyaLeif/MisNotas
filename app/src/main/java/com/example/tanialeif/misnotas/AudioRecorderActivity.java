@@ -20,6 +20,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.tanialeif.misnotas.DB.DAOMedia;
+import com.example.tanialeif.misnotas.DB.DAOMemo;
+import com.example.tanialeif.misnotas.Model.Media;
+
 import java.io.File;
 
 public class AudioRecorderActivity extends AppCompatActivity {
@@ -86,6 +90,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
             Toast.makeText(this, "Aun no has grabado nada!", Toast.LENGTH_SHORT)
                     .show();
         } else {
+
             setResult(RESULT_OK);
             finish();
         }

@@ -17,10 +17,10 @@ public class DBConnection extends SQLiteOpenHelper {
 
     private String CREATE_TABLE_MEDIA ="create table media (" +
             "_id integer primary key autoincrement," +
-            "_archivo text, _idImage integer, _idNote integer)";
+            "_archivo text, _idImage text, _type text, _idNote integer)";
 
     public DBConnection(Context context) {
-        super(context, "db_mis_notas", null, 5);
+        super(context, "db_mis_notas", null, 6);
     }
 
     @Override
@@ -34,6 +34,7 @@ public class DBConnection extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS note");
         db.execSQL("DROP TABLE IF EXISTS memo");
+        db.execSQL("DROP TABLE IF EXISTS media");
 
         onCreate(db);
     }

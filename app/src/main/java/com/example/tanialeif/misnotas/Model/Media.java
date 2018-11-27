@@ -1,15 +1,20 @@
 package com.example.tanialeif.misnotas.Model;
 
 public class Media {
+
+    public enum TypeMedia {Audio, Photo}
+
     private long id;
     private String archivo;
-    private long idImage;
+    private String idImage;
+    private TypeMedia type;
     private long idNote;
 
-    public Media(long id, String archivo, long idImage, long idNote) {
+    public Media(long id, String archivo, String idImage, TypeMedia type, long idNote) {
         this.id = id;
         this.archivo = archivo;
         this.idImage = idImage;
+        this.type = type;
         this.idNote = idNote;
     }
 
@@ -21,11 +26,15 @@ public class Media {
 
     public void setArchivo(String archivo) { this.archivo = archivo; }
 
-    public long getIdImage() { return idImage; }
+    public String getIdImage() { return idImage; }
 
-    public void setIdImage(long idImage) { this.idImage = idImage; }
+    public void setIdImage(String idImage) { this.idImage = idImage; }
 
     public long getIdNote() { return idNote; }
 
     public void setIdNote(long idNote) { this.idNote = idNote; }
+
+    public TypeMedia getType() { return type; }
+
+    public void setType(TypeMedia type) { this.type = type; }
 }
