@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -45,6 +47,7 @@ import java.util.Date;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission_group.CAMERA;
+import static java.security.AccessController.getContext;
 
 public class NotaActivity extends AppCompatActivity {
 
@@ -62,12 +65,14 @@ public class NotaActivity extends AppCompatActivity {
     int REQ_MOD_NOTE = 2;
     int INSERT_MEMO = 3;
     int INSERT_AUDIO = 4;
+    int INSERT_FOTO = 5;
     long ID_NOTA = -1;
 
     boolean allowetToUseCamera = false;
     boolean allowetToUseAudio = false;
 
     String type_note;
+    String pathPhoto;
 
     ArrayList<Memo> temporalMemo = new ArrayList<>();
     ArrayList<Media> temporalMedia = new ArrayList<>();
@@ -152,8 +157,7 @@ public class NotaActivity extends AppCompatActivity {
                             case 1: {
                                 validarCamara();;
                                 if(allowetToUseCamera) {
-                                    Intent detail = new Intent(self, PhotoActivity.class);
-                                    startActivity(detail);
+                                    tomarFoto();
                                 }
                                 break;
                             }
@@ -353,9 +357,28 @@ public class NotaActivity extends AppCompatActivity {
                 actual.setId(idMedia);
 
                 daoMedia.update(actual);
-                txtTitulo.setText(daoMedia.get(idMedia).getIdNote()+"");
 
                 File newPath = new File(path, "audio"+idMedia+".3gp");
+                file.renameTo(newPath);
+            }
+
+            if(actual.getType().toString().equals("Photo")){
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                File file = new File(path, "foto"+i+".jpg");
+
+                actual.setIdNote(id);
+
+                long idMedia = daoMedia.insert(actual);
+
+                actual.setArchivo(Environment.DIRECTORY_PICTURES+"photo"+idMedia+".jpg");
+                actual.setIdNote(ID_NOTA);
+                actual.setId(idMedia);
+                actual.setIdImage("photo"+idMedia+".jpg");
+
+                daoMedia.update(actual);
+                txtTitulo.setText(daoMedia.get(idMedia).getIdImage()+"");
+
+                File newPath = new File(path, "photo"+idMedia+".jpg");
                 file.renameTo(newPath);
             }
         }
@@ -393,7 +416,15 @@ public class NotaActivity extends AppCompatActivity {
 
     }
 
+    private void tomarFoto(){
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File file = new File(path, "tmp_photo.jpg");
 
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+
+        startActivityForResult(intent,INSERT_FOTO);
+    }
 
     public void editNote(long id){
         DAONote daoNote = new DAONote(this);
@@ -442,6 +473,33 @@ public class NotaActivity extends AppCompatActivity {
             }
 
         }
+
+        if(requestCode == INSERT_FOTO)
+            MediaScannerConnection.scanFile(this, new String[]{}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.i("Path", ""+path);
+                        }
+                    });
+
+            txtTitulo.setText("holi");
+
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File file = new File(path, "tmp_photo.jpg");
+
+            File newPath = new File(path, "foto" + temporalMedia.size() + ".jpg");
+            file.renameTo(newPath);
+
+                Media media = new Media(
+                        1,
+                        "foto"+temporalMedia.size()+".jpg",
+                        "foto"+temporalMedia.size()+".jpg",
+                        Media.TypeMedia.Photo,
+                        ID_NOTA
+                );
+
+            temporalMedia.add(media);
 
     }
 }

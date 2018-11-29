@@ -43,7 +43,12 @@ public class ListImageAdapter extends RecyclerView.Adapter<ListImageAdapter.View
             Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
             viewHolder.imgItem.setImageBitmap(bitmap);
         }
-
+        else{
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File file = new File(path,galleryListt.get(i));
+            Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
+            viewHolder.imgItem.setImageBitmap(bitmap);
+        }
     }
 
     @Override
