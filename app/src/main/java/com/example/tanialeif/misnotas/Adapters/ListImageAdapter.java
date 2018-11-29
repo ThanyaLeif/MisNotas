@@ -3,6 +3,7 @@ package com.example.tanialeif.misnotas.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +43,9 @@ public class ListImageAdapter extends RecyclerView.Adapter<ListImageAdapter.View
             File file = new File(path,"a.jpg");
             Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
             viewHolder.imgItem.setImageBitmap(bitmap);
+        }
+        else if(galleryListt.get(i).startsWith("content")){
+            viewHolder.imgItem.setImageURI(Uri.parse(galleryListt.get(i)));
         }
         else{
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);

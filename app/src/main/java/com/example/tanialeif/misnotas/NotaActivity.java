@@ -66,6 +66,8 @@ public class NotaActivity extends AppCompatActivity {
     int INSERT_MEMO = 3;
     int INSERT_AUDIO = 4;
     int INSERT_FOTO = 5;
+    int INSERT_VIDEO = 6;
+    int INSERT_MULTI = 7;
     long ID_NOTA = -1;
 
     boolean allowetToUseCamera = false;
@@ -135,6 +137,8 @@ public class NotaActivity extends AppCompatActivity {
                 CharSequence[] options = new CharSequence[]  {
                         "Audio",
                         "Camara",
+                        "Video",
+                        "Desde galeria",
                         "Recordatorio"
                 };
                 AlertDialog.Builder menu = new AlertDialog.Builder(self);
@@ -155,16 +159,30 @@ public class NotaActivity extends AppCompatActivity {
                                 break;
                             }
                             case 1: {
-                                validarCamara();;
+                                validarCamara();
                                 if(allowetToUseCamera) {
                                     tomarFoto();
                                 }
                                 break;
                             }
 
-                            case 2: {
+                            case 2:{
+                                validarCamara();
+                                if (allowetToUseCamera){
+                                    tomarVideo();
+                                }
+                                break;
+                            }
+
+                            case 3:{
+                                tomarMultimedia();
+                                break;
+                            }
+
+                            case 4: {
                                 Intent detail = new Intent(self, MemoActivity.class);
                                 startActivityForResult(detail,INSERT_MEMO);
+                                break;
                             }
                         }
                     }
@@ -381,6 +399,31 @@ public class NotaActivity extends AppCompatActivity {
                 File newPath = new File(path, "photo"+idMedia+".jpg");
                 file.renameTo(newPath);
             }
+
+            if(actual.getType().toString().equals("Video")){
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+                File file = new File(path, "video"+i+".3gp");
+
+                actual.setIdNote(id);
+
+                long idMedia = daoMedia.insert(actual);
+
+                actual.setArchivo(Environment.DIRECTORY_MOVIES+"video"+idMedia+".3gp");
+                actual.setIdNote(ID_NOTA);
+                actual.setId(idMedia);
+
+                daoMedia.update(actual);
+
+                File newPath = new File(path, "video"+idMedia+".3gp");
+                file.renameTo(newPath);
+            }
+
+            if(actual.getType().toString().equals("Multi")){
+                actual.setIdNote(ID_NOTA);
+                long idMulti = daoMedia.insert(actual);
+                txtTitulo.setText(daoMedia.get(idMulti).getIdImage());
+            }
+
         }
 
     }
@@ -426,6 +469,24 @@ public class NotaActivity extends AppCompatActivity {
         startActivityForResult(intent,INSERT_FOTO);
     }
 
+    private void tomarVideo(){
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+        File file = new File(path, "tmp_video.3gp");
+
+        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+
+        startActivityForResult(intent,INSERT_VIDEO);
+    }
+
+    public void tomarMultimedia(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/");
+
+        startActivityForResult(intent.createChooser(intent,"Seleccione"),INSERT_MULTI);
+    }
+
     public void editNote(long id){
         DAONote daoNote = new DAONote(this);
         Note note = daoNote.get(id);
@@ -448,6 +509,7 @@ public class NotaActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == INSERT_MEMO){
+
             Memo memo = (Memo)data.getExtras().getSerializable("memo");
             temporalMemo.add(memo);
         }
@@ -474,7 +536,7 @@ public class NotaActivity extends AppCompatActivity {
 
         }
 
-        if(requestCode == INSERT_FOTO)
+        if(requestCode == INSERT_FOTO){
             MediaScannerConnection.scanFile(this, new String[]{}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
                         @Override
@@ -482,8 +544,6 @@ public class NotaActivity extends AppCompatActivity {
                             Log.i("Path", ""+path);
                         }
                     });
-
-            txtTitulo.setText("holi");
 
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             File file = new File(path, "tmp_photo.jpg");
@@ -500,6 +560,41 @@ public class NotaActivity extends AppCompatActivity {
                 );
 
             temporalMedia.add(media);
+        }
+
+        if(requestCode == INSERT_VIDEO){
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+            File file = new File(path, "tmp_video.3gp");
+
+            File newPath = new File(path, "video" + temporalMedia.size() + ".3gp");
+            file.renameTo(newPath);
+
+            Media media = new Media(
+                    1,
+                    "video"+temporalMedia.size()+".3gp",
+                    "R.drawable.fondo1.png",
+                    Media.TypeMedia.Video,
+                    ID_NOTA
+            );
+
+            temporalMedia.add(media);
+        }
+
+        if(requestCode== INSERT_MULTI){
+            Uri miPath = data.getData();
+            //File file = new File(miPath.getPath());
+
+            Media media = new Media(
+                    1,
+                    miPath.toString(),
+                    miPath.toString(),
+                    Media.TypeMedia.Multi,
+                    ID_NOTA
+            );
+
+            temporalMedia.add(media);
+
+        }
 
     }
 }

@@ -2,7 +2,7 @@ package com.example.tanialeif.misnotas.Model;
 
 public class Media {
 
-    public enum TypeMedia {Audio, Photo}
+    public enum TypeMedia {Audio, Photo, Video, Multi}
 
     private long id;
     private String archivo;

@@ -22,7 +22,7 @@ public class DAOMedia {
         cv.put("_archivo",media.getArchivo());
         cv.put("_idImage",media.getIdImage());
         cv.put("_type",media.getType().toString());
-        cv.put("_idNote",media.getIdImage());
+        cv.put("_idNote",media.getIdNote());
 
         return db.insert("media",null,cv);
     }
@@ -73,7 +73,11 @@ public class DAOMedia {
                 cursor.getString(2),
                 cursor.getString(3).equals("Audio")
                         ? Media.TypeMedia.Audio
-                        : Media.TypeMedia.Photo,
+                        : cursor.getString(3).equals("Photo") ?
+                        Media.TypeMedia.Photo
+                        : cursor.getString(3).equals("Multi") ?
+                        Media.TypeMedia.Multi :
+                        Media.TypeMedia.Video,
                 cursor.getLong(4)
         );
     }
