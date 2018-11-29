@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -60,6 +61,7 @@ public class NotaActivity extends AppCompatActivity {
     EditText txtTitulo, txtDescripcion;
     TextView txtFecha, txtHora;
     Button btnFecha, btnHora;
+    MediaPlayer player;
 
     int REQ_NEW_NOTE = 1;
     int REQ_MOD_NOTE = 2;
@@ -193,11 +195,73 @@ public class NotaActivity extends AppCompatActivity {
 
         });
 
+        final DAOMedia daoMedia = new DAOMedia(this);
         listFiles = findViewById(R.id.listMedia);
         listFiles.setLayoutManager(new LinearLayoutManager(this));
-        adapterMedia = new ListImageAdapter(this, getImages());
+        adapterMedia = new ListImageAdapter(this,daoMedia.getAll(ID_NOTA) );
         listFiles.setAdapter(adapterMedia);
 
+        adapterMedia.setOnItemLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int vid = list.getChildAdapterPosition(v);
+                final Media media = adapterMedia.getItem(vid);
+
+
+                CharSequence[] options = new CharSequence[]  {
+                        "Eliminar"
+                };
+
+                AlertDialog.Builder menu = new AlertDialog.Builder(self);
+
+                menu.setItems(options,  new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+
+                            case 0:{
+                                daoMedia.delete(media.getId());
+                                adapter.updateData(daoMemo.getAll(ID_NOTA));
+                                break;
+                            }
+                        }
+                    }
+                });
+
+                menu.show();
+                return true;
+            }
+
+        });
+
+        adapterMedia.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int vid = list.getChildAdapterPosition(v);
+                final Media media = adapterMedia.getItem(vid);
+
+                if (media.getType().toString().equals("Photo") || media.getType().toString().equals("Multi")) {
+                    Intent detail = new Intent(self, PhotoActivity.class);
+                    detail.putExtra("id", media.getId());
+                    startActivity(detail);
+                }
+                else if(media.getType().toString().equals("Audio")){
+                    try {
+                        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS);
+                        File file = new File(path, media.getArchivo());
+
+                        player = new MediaPlayer();
+                        player.setDataSource(file.getAbsolutePath());
+                        player.prepare();
+                        player.start();
+
+                    } catch (Exception ex) {
+                        txtTitulo.setText(media.getArchivo());
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
 
         list = findViewById(R.id.listMemo);
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -370,7 +434,7 @@ public class NotaActivity extends AppCompatActivity {
 
                 long idMedia = daoMedia.insert(actual);
 
-                actual.setArchivo(Environment.DIRECTORY_PODCASTS+"audio"+idMedia+".3gp");
+                actual.setArchivo("audio"+idMedia+".3gp");
                 actual.setIdNote(ID_NOTA);
                 actual.setId(idMedia);
 

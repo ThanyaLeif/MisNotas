@@ -1,6 +1,8 @@
 package com.example.tanialeif.misnotas.Model;
 
-public class Media {
+import java.io.Serializable;
+
+public class Media implements Serializable {
 
     public enum TypeMedia {Audio, Photo, Video, Multi}
 

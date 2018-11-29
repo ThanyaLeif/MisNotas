@@ -20,17 +20,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListImageAdapter extends RecyclerView.Adapter<ListImageAdapter.ViewHolder> {
-    private ArrayList<String> galleryListt;
+    private ArrayList<Media> galleryListt;
     private Context context;
 
-    public ListImageAdapter(Context context, ArrayList<String> galleryListt){
+    private View.OnLongClickListener onLongClickListener;
+    private View.OnClickListener onClickListener;
+
+    public ListImageAdapter(Context context, ArrayList<Media> galleryListt){
         this.context = context;
         this.galleryListt = galleryListt;
+    }
+
+    public void setOnItemLongClickListener(View.OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
+    }
+
+    public void setOnItemClickListener(View.OnClickListener onClickListener){
+        this.onClickListener = onClickListener;
     }
 
     @Override
     public ListImageAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_image_view, viewGroup, false);
+
+        view.setOnLongClickListener(onLongClickListener);
+        view.setOnClickListener(onClickListener);
+
         return  new ViewHolder(view);
     }
 
@@ -38,18 +53,18 @@ public class ListImageAdapter extends RecyclerView.Adapter<ListImageAdapter.View
     public void onBindViewHolder(ListImageAdapter.ViewHolder viewHolder, int i) {
         viewHolder.imgItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        if(galleryListt.get(i).equals("R.drawable.fondo1.png")){
+        if(galleryListt.get(i).getIdImage().equals("R.drawable.fondo1.png")){
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             File file = new File(path,"a.jpg");
             Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
             viewHolder.imgItem.setImageBitmap(bitmap);
         }
-        else if(galleryListt.get(i).startsWith("content")){
-            viewHolder.imgItem.setImageURI(Uri.parse(galleryListt.get(i)));
+        else if(galleryListt.get(i).getIdImage().startsWith("content")){
+            viewHolder.imgItem.setImageURI(Uri.parse(galleryListt.get(i).getIdImage()));
         }
         else{
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File file = new File(path,galleryListt.get(i));
+            File file = new File(path,galleryListt.get(i).getIdImage());
             Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
             viewHolder.imgItem.setImageBitmap(bitmap);
         }
@@ -69,5 +84,9 @@ public class ListImageAdapter extends RecyclerView.Adapter<ListImageAdapter.View
             imgItem = view.findViewById(R.id.imgItem);
         }
 
+    }
+
+    public Media getItem(int position){
+        return galleryListt.get(position);
     }
 }
