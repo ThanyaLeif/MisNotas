@@ -113,22 +113,17 @@ public class MemoActivity extends AppCompatActivity {
         cal.set(anio,mes,dia,hora,minutos);
 
         AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, MyAlarm.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+        Intent intent1 = new Intent(this, MyAlarm.class);
+        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, 0, intent1, 0);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent1);
+
+        Intent intent = new Intent(getApplicationContext(),NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
+                100,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
     }
 
-    private void startAlarm(Calendar c){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, MyAlarm.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast
-                (this,0,intent,0);
-
-        alarmManager.setRepeating(AlarmManager.RTC, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
-                pendingIntent);
-
-        Toast.makeText(this, "Alarm is set", Toast.LENGTH_SHORT).show();
-    }
 
 }
