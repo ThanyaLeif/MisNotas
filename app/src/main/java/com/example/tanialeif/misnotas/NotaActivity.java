@@ -256,9 +256,13 @@ public class NotaActivity extends AppCompatActivity {
                         player.start();
 
                     } catch (Exception ex) {
-                        txtTitulo.setText(media.getArchivo());
                         ex.printStackTrace();
                     }
+                }
+                else {
+                    Intent detail = new Intent(self,VideoActivity.class);
+                    detail.putExtra("id",media.getId());
+                    startActivity(detail);
                 }
             }
         });
@@ -472,7 +476,7 @@ public class NotaActivity extends AppCompatActivity {
 
                 long idMedia = daoMedia.insert(actual);
 
-                actual.setArchivo(Environment.DIRECTORY_MOVIES+"video"+idMedia+".3gp");
+                actual.setArchivo("video"+idMedia+".3gp");
                 actual.setIdNote(ID_NOTA);
                 actual.setId(idMedia);
 
