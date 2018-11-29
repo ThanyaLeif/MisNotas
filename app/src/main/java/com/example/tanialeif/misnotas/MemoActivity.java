@@ -1,6 +1,8 @@
 package com.example.tanialeif.misnotas;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.tanialeif.misnotas.Model.Memo;
 
@@ -58,6 +61,8 @@ public class MemoActivity extends AppCompatActivity {
                 },anio, mes, dia
                 );
                 datePickerDialog.show();
+
+                //startAlarm(calendar);
             }
         });
         btnHoraMemo.setOnClickListener(new View.OnClickListener() {
@@ -92,12 +97,38 @@ public class MemoActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("memo", memo);
                 resultIntent.putExtras(bundle);
+                prueba();
                 setResult(INSERT_MEMO,resultIntent);
                 finish();
 
             }
         });
 
+    }
+
+    private void prueba(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.clear();
+        cal.set(anio,mes,dia,hora,minutos);
+
+        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, MyAlarm.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+    }
+
+    private void startAlarm(Calendar c){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, MyAlarm.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast
+                (this,0,intent,0);
+
+        alarmManager.setRepeating(AlarmManager.RTC, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
+                pendingIntent);
+
+        Toast.makeText(this, "Alarm is set", Toast.LENGTH_SHORT).show();
     }
 
 }

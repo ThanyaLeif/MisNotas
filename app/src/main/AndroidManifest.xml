@@ -39,6 +39,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PhotoActivity" />
         <activity android:name=".VideoActivity" />
+        <receiver android:name=".MyAlarm"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

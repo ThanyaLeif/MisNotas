@@ -1,6 +1,7 @@
 package com.example.tanialeif.misnotas;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -421,6 +422,10 @@ public class NotaActivity extends AppCompatActivity {
             temporalMemo.get(i).setIdNote(id);
             daoMemo.insert(temporalMemo.get(i));
         }
+    }
+
+    private void startAlarm(Calendar c){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
     }
 
     public void insertMedia(long id){
