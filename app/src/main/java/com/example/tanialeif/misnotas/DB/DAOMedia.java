@@ -33,7 +33,7 @@ public class DAOMedia {
         cv.put("_archivo",media.getArchivo());
         cv.put("_idImage",media.getIdImage());
         cv.put("_type",media.getType().toString());
-        cv.put("_idNote",media.getIdImage());
+        cv.put("_idNote",media.getIdNote());
 
         return db.update("media",cv, "_id=?",
                 new String[] {String.valueOf(media.getId())});

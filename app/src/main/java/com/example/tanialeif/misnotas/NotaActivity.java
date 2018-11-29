@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.example.tanialeif.misnotas.Adapters.ListImageAdapter;
 import com.example.tanialeif.misnotas.Adapters.ListMemoAdapter;
 import com.example.tanialeif.misnotas.DB.DAOMedia;
 import com.example.tanialeif.misnotas.DB.DAOMemo;
@@ -47,8 +48,9 @@ import static android.Manifest.permission_group.CAMERA;
 
 public class NotaActivity extends AppCompatActivity {
 
-    RecyclerView list;
+    RecyclerView list, listFiles;
     ListMemoAdapter adapter;
+    ListImageAdapter adapterMedia;
 
     Button btnGuardar;
     FloatingActionButton btnAgregarMultimedia;
@@ -168,6 +170,12 @@ public class NotaActivity extends AppCompatActivity {
             }
 
         });
+
+        listFiles = findViewById(R.id.listMedia);
+        listFiles.setLayoutManager(new LinearLayoutManager(this));
+        adapterMedia = new ListImageAdapter(this, getImages());
+        listFiles.setAdapter(adapterMedia);
+
 
         list = findViewById(R.id.listMemo);
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -336,22 +344,34 @@ public class NotaActivity extends AppCompatActivity {
                 File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS);
                 File file = new File(path, "tmp"+i+".3gp");
 
-                txtTitulo.setText("Si");
-
                 actual.setIdNote(id);
 
                 long idMedia = daoMedia.insert(actual);
 
                 actual.setArchivo(Environment.DIRECTORY_PODCASTS+"audio"+idMedia+".3gp");
+                actual.setIdNote(ID_NOTA);
                 actual.setId(idMedia);
 
                 daoMedia.update(actual);
+                txtTitulo.setText(daoMedia.get(idMedia).getIdNote()+"");
 
                 File newPath = new File(path, "audio"+idMedia+".3gp");
                 file.renameTo(newPath);
             }
         }
 
+    }
+
+    public ArrayList<String> getImages(){
+        DAOMedia daoMedia = new DAOMedia(this);
+        ArrayList<Media> media = daoMedia.getAll(ID_NOTA);
+        ArrayList<String> result = new ArrayList<>();
+
+        for(int i=0; i<media.size(); i++){
+            result.add(media.get(i).getIdImage());
+        }
+
+        return result;
     }
 
     public long insertNote(){
@@ -415,7 +435,7 @@ public class NotaActivity extends AppCompatActivity {
                         "audio" + temporalMedia.size() + ".3gp",
                         "R.drawable.fondo1.png",
                         Media.TypeMedia.Audio,
-                        1
+                        ID_NOTA
                 );
 
                 temporalMedia.add(media);
