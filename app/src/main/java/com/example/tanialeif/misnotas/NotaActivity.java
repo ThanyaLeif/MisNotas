@@ -128,6 +128,7 @@ public class NotaActivity extends AppCompatActivity {
                         insertMemo(ID_NOTA);
                         insertMedia(ID_NOTA);
                     }
+                    finish();
                 }
             }
         );
@@ -196,77 +197,77 @@ public class NotaActivity extends AppCompatActivity {
 
         });
 
-        final DAOMedia daoMedia = new DAOMedia(this);
-        listFiles = findViewById(R.id.listMedia);
-        listFiles.setLayoutManager(new LinearLayoutManager(this));
-        adapterMedia = new ListImageAdapter(this,daoMedia.getAll(ID_NOTA) );
-        listFiles.setAdapter(adapterMedia);
+        if(ID_NOTA!=-1) {
+            final DAOMedia daoMedia = new DAOMedia(this);
+            listFiles = findViewById(R.id.listMedia);
+            listFiles.setLayoutManager(new LinearLayoutManager(this));
+            adapterMedia = new ListImageAdapter(this, daoMedia.getAll(ID_NOTA));
+            listFiles.setAdapter(adapterMedia);
 
-        adapterMedia.setOnItemLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                int vid = list.getChildAdapterPosition(v);
-                final Media media = adapterMedia.getItem(vid);
+            adapterMedia.setOnItemLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int vid = list.getChildAdapterPosition(v);
+                    final Media media = adapterMedia.getItem(vid);
 
 
-                CharSequence[] options = new CharSequence[]  {
-                        "Eliminar"
-                };
+                    CharSequence[] options = new CharSequence[]{
+                            "Eliminar"
+                    };
 
-                AlertDialog.Builder menu = new AlertDialog.Builder(self);
+                    AlertDialog.Builder menu = new AlertDialog.Builder(self);
 
-                menu.setItems(options,  new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                    menu.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
 
-                            case 0:{
-                                daoMedia.delete(media.getId());
-                                adapter.updateData(daoMemo.getAll(ID_NOTA));
-                                break;
+                                case 0: {
+                                    daoMedia.delete(media.getId());
+                                    adapterMedia.updateData(daoMedia.getAll(ID_NOTA));
+                                    break;
+                                }
                             }
                         }
+                    });
+
+                    menu.show();
+                    return true;
+                }
+
+            });
+
+            adapterMedia.setOnItemClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int vid = list.getChildAdapterPosition(v);
+                    final Media media = adapterMedia.getItem(vid);
+
+                    if (media.getType().toString().equals("Photo") || media.getType().toString().equals("Multi")) {
+                        Intent detail = new Intent(self, PhotoActivity.class);
+                        detail.putExtra("id", media.getId());
+                        startActivity(detail);
+                    } else if (media.getType().toString().equals("Audio")) {
+                        try {
+                            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS);
+                            File file = new File(path, media.getArchivo());
+
+                            player = new MediaPlayer();
+                            player.setDataSource(file.getAbsolutePath());
+                            player.prepare();
+                            player.start();
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    } else {
+                        Intent detail = new Intent(self, VideoActivity.class);
+                        detail.putExtra("id", media.getId());
+                        startActivity(detail);
                     }
-                });
-
-                menu.show();
-                return true;
-            }
-
-        });
-
-        adapterMedia.setOnItemClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int vid = list.getChildAdapterPosition(v);
-                final Media media = adapterMedia.getItem(vid);
-
-                if (media.getType().toString().equals("Photo") || media.getType().toString().equals("Multi")) {
-                    Intent detail = new Intent(self, PhotoActivity.class);
-                    detail.putExtra("id", media.getId());
-                    startActivity(detail);
                 }
-                else if(media.getType().toString().equals("Audio")){
-                    try {
-                        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS);
-                        File file = new File(path, media.getArchivo());
-
-                        player = new MediaPlayer();
-                        player.setDataSource(file.getAbsolutePath());
-                        player.prepare();
-                        player.start();
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                else {
-                    Intent detail = new Intent(self,VideoActivity.class);
-                    detail.putExtra("id",media.getId());
-                    startActivity(detail);
-                }
-            }
-        });
+            });
+        }
 
         list = findViewById(R.id.listMemo);
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -301,7 +302,6 @@ public class NotaActivity extends AppCompatActivity {
                             case 1:{
                                 daoMemo.delete(memo.getId());
                                 adapter.updateData(daoMemo.getAll(ID_NOTA));
-                                //TODO: Hacer que se recargue la información después de borrar
                                 break;
                             }
                         }

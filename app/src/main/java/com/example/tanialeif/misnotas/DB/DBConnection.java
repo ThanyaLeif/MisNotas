@@ -20,7 +20,7 @@ public class DBConnection extends SQLiteOpenHelper {
             "_archivo text, _idImage text, _type text, _idNote integer)";
 
     public DBConnection(Context context) {
-        super(context, "db_mis_notas", null, 6);
+        super(context, "db_mis_notas", null, 7);
     }
 
     @Override

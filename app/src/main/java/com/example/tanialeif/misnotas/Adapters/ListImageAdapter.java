@@ -39,6 +39,10 @@ public class ListImageAdapter extends RecyclerView.Adapter<ListImageAdapter.View
         this.onClickListener = onClickListener;
     }
 
+    public void updateData(ArrayList<Media> data) {
+        this.galleryListt = data;
+    }
+
     @Override
     public ListImageAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_image_view, viewGroup, false);

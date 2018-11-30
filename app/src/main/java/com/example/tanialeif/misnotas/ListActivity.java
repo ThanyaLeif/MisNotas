@@ -312,8 +312,8 @@ public class ListActivity extends AppCompatActivity
                         break;
                     }
                     case 2: {
-                        // TODO: MARCAR COMO HECHA
-                        Log.i("ATSARATSA", "Marcar como hecha");
+                        note.setChecked(true);
+                        daoNote.update(note);
                         break;
                     }
                 }
