@@ -41,6 +41,7 @@ public class ListImageAdapter extends RecyclerView.Adapter<ListImageAdapter.View
 
     public void updateData(ArrayList<Media> data) {
         this.galleryListt = data;
+        notifyDataSetChanged();
     }
 
     @Override

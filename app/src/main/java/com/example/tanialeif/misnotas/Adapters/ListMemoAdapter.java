@@ -34,6 +34,7 @@ public class ListMemoAdapter extends RecyclerView.Adapter<ListMemoAdapter.ViewHo
 
     public void updateData(ArrayList<Memo> data) {
         this.dataset = data;
+        notifyDataSetChanged();
     }
 
     public void setOnItemLongClickListener(View.OnLongClickListener onLongClickListener) {
